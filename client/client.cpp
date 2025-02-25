@@ -4,6 +4,7 @@
 #include <thrift/transport/TTransportUtils.h>
 #include <thrift/protocol/TBinaryProtocol.h>
 #include "../gen-cpp/Coordinator.h"
+#include "../gen-cpp/distributedML.h"
 
 using namespace std;
 using namespace apache::thrift::transport;
@@ -19,10 +20,10 @@ int main(int argc, char** argv) {
     }
 
     std::string ip = argv[1];
-    int port = std::__cxx11::stoi(argv[2]);
+    int port = std::stoi(argv[2]);
     std::string dir = argv[3];
-    int rounds = std::__cxx11::stoi(argv[4]);
-    int epochs = std::__cxx11::stoi(argv[5]);
+    int rounds = std::stoi(argv[4]);
+    int epochs = std::stoi(argv[5]);
 
     try {
         // Create a socket connection
@@ -37,18 +38,18 @@ int main(int argc, char** argv) {
         transport->open();
 
         // Call the server's ping() function
-	std::string dir = "./ML/ML/letters";
-        double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_nodes.txt");
-	std::cout << "Connected to server!" << std::endl;
 
-	std::cout << "Validation error: " << res << std::endl;
+        double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_node.txt");
+	      std::cout << "Connected to server!" << std::endl;
+
+	      std::cout << "Validation error: " << res << std::endl;
 
         // Close the connection
         transport->close();
-	std::cout << "Connection closed." << std::endl;
+	      std::cout << "Connection closed." << std::endl;
 
     } catch (TException& tx) {
-	    std::cerr << "Thrift error: " << tx.what() << std::endl;
+	      std::cout << "Thrift error: " << tx.what() << std::endl;
         exit(1);
     }
 
