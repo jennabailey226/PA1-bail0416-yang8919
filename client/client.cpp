@@ -4,7 +4,6 @@
 #include <thrift/transport/TTransportUtils.h>
 #include <thrift/protocol/TBinaryProtocol.h>
 #include "../gen-cpp/Coordinator.h"
-#include "../gen-cpp/distributedML.h"
 
 using namespace std;
 using namespace apache::thrift::transport;
