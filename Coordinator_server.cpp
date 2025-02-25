@@ -39,8 +39,16 @@ class CoordinatorHandler : virtual public CoordinatorIf {
       ComputeNodeInfo in;
       std::stringstream ss(line);
       char delimiter;
-      if (!(ss >> in.ip >> delimiter >> in.port >> delimiter >> in.load_probability) || delimiter != ',') {
-        std::cout << "Error: Invalid format in file: " << line << std::endl;
+      if (!(ss >> in.ip >> delimiter) || delimiter != ',') {
+        std::cout << "Error: Invalid format in file (IP failed): " << line << std::endl;
+        exit(1);
+      }
+      if (!(ss >> in.port >> delimiter) || delimiter != ',') {
+        std::cout << "Error: Invalid format in file (Port failed): " << line << std::endl;
+        exit(1);
+      }
+      if (!(ss >> in.load_probability)) {
+        std::cout << "Error: Invalid format in file (Load probability failed): " << line << std::endl;
         exit(1);
       }
       _return.emplace_back(in);
