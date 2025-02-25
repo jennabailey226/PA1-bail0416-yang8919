@@ -40,6 +40,8 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
 
     local_model.get_weights(W, V);
     std::cout << "before calc\n";
+    std::cout << "W's size: " << W.size() << " V's size: " << V.size() << std::endl;
+    std::cout << "o W's size: " << W_original.size() << " o V's size: " << V_original.size() << std::endl;
     calc_gradient(W, W_original);
     calc_gradient(V, V_original);
     std::cout << "after calc\n";
