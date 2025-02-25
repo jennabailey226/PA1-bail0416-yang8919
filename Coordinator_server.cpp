@@ -67,9 +67,12 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
     // Initialize the global model
     mlp almighty;
-    
+
     // filename's path is for ML.cpp
-    almighty.init_training_random("letters/train_letters1.txt", k, h);
+    if (!almighty.init_training_random("./letters/train_letters1.txt", k, h)){
+      std::cout << "Can't open the training file\n";
+      exit(1);
+    }
 
     Weights shared_weights;
     std::vector<std::vector<double>> W;
