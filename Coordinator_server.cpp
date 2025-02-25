@@ -28,8 +28,8 @@ class CoordinatorHandler : virtual public CoordinatorIf {
   }
 
   void load_compute_nodes(std::vector<ComputeNodeInfo> & _return, const std::string& filename) {
-    //std::ifstream file("/home/yang8919/PA1-bail0416-yang8919-yahui/" + filename);
-    std::ifstream file("./" + filename);
+    std::ifstream file("/home/yang8919/PA1-bail0416-yang8919-yahui/" + filename);
+    //std::ifstream file("./" + filename);
     if (!file.is_open()) {
       std::cout << "Error: Unable to open file " << filename << std::endl;
       exit(1);
@@ -39,7 +39,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
       ComputeNodeInfo in;
       std::stringstream ss(line);
       char delimiter;
-      if (!(ss >> in.ip >> delimiter >> in.port >> in.load_probability) || delimiter != ',') {
+      if (!(ss >> in.ip >> delimiter >> in.port >> delimiter >> in.load_probability) || delimiter != ',') {
         std::cout << "Error: Invalid format in file: " << line << std::endl;
         exit(1);
       }
