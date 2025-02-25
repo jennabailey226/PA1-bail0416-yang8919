@@ -78,7 +78,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     // std::vector<std::vector<double>> V;
 
     almighty.get_weights(shared_weights.V, shared_weights.W);
-    
+
     // std::cout << "v's size" << V.size() << endl;
     // std::cout << "w's size" << W.size() << endl;
 
@@ -116,7 +116,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
         Gradient grad;
         client.trainModel(grad, shared_weights, training_file, eta, epochs);
         transport->close();
-
+        std::cout << "coordinator1\n";
         for (int i = 0; i < shared_gradient_V.size(); i++) {
           for (int j = 0; j < shared_gradient_V[i].size(); j++) {
               shared_gradient_V[i][j] += grad.dV[i][j];
@@ -129,15 +129,20 @@ class CoordinatorHandler : virtual public CoordinatorIf {
         }
       }
     };
+    std::cout << "coordinator2\n";
     std::vector<std::thread> workers;
     for (int i = 0; i < compute_nodes.size(); i++) {
         workers.emplace_back(thread_func, i);
     }
+    std::cout << "coordinator3\n";
     for (auto& worker:workers) {
         worker.join();
     }
+    std::cout << "coordinator4\n";
     almighty.update_weights(shared_gradient_V, shared_gradient_W);
+    std::cout << "coordinator5\n";
     double validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
+    std::cout << "coordinator6\n";
     // std::cout << "Validation error: " << validation_error << endl;
     return validation_error;
   }
