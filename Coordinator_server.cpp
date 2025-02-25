@@ -99,7 +99,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
         transport->open();
         Gradient grad;
-        client.trainModel(grad, shared_weights, training_file, eta, epochs);
+        client.trainModel(grad, shared_weights, dir + "/" + training_file, eta, epochs);
         transport->close();
 
         for (int i = 0; i < shared_gradient_V.size(); i++) {
