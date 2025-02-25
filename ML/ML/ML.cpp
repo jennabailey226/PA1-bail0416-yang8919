@@ -496,6 +496,7 @@ bool mlp::read_data(vector<vector<int>>& _X, vector<int>& _X_labels, string fnam
     }
     cout << "read3\n";
     data.close();
+    cout << "read4\n";
     return true;
 }
 
