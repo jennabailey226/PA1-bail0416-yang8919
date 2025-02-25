@@ -22,6 +22,7 @@ include_directories("$ENV{HOME}/thrift-0.19.0/lib/cpp/src")
 # need to include each individual cpp file from the gen-cpp folder
 set(exgencpp_SOURCES
     gen-cpp/Coordinator.cpp
+    gen-cpp/ComputeNode.cpp
     gen-cpp/distributedML_types.cpp
 )
 add_library(exgencpp STATIC ${exgencpp_SOURCES})
