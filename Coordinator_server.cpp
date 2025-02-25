@@ -68,7 +68,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     mlp almighty;
 
     // filename's path is for ML.cpp
-    if (!almighty.init_training_random(dir + "/ML/ML/letters/train-letters1.txt", k, h)){
+    if (!almighty.init_training_random(dir + "/ML/ML/letters/train_letters1.txt", k, h)){
       std::cout << "Can't open the training file\n";
       exit(1);
     }
