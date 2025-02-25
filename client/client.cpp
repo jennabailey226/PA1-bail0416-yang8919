@@ -4,7 +4,6 @@
 #include <thrift/transport/TTransportUtils.h>
 #include <thrift/protocol/TBinaryProtocol.h>
 #include "./gen-cpp/Coordinator.h"
-#include "./gen-cpp/ComputeNode.h"
 #include "./gen-cpp/distributedML.h"
 
 using namespace std;
@@ -28,9 +27,9 @@ int main(int argc, char** argv) {
 
     try {
         // Create a socket connection
-        boost::shared_ptr<TTransport> socket(new TSocket(ip, port));
-        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+        std::shared_ptr<TTransport> socket(new TSocket(ip, port));
+        std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+        std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
 
         // Create client
         CoordinatorClient client(protocol);
