@@ -75,7 +75,7 @@ bool mlp::init_training_random(string fname, int _k, int _h)
     }
     cout << "test\n";
     n = X.size();
-    cout << "x.size(): " << " X.size() << endl;
+    cout << "x.size(): " << X.size() << endl;
     d = X[0].size();
     cout << "test00\n";
 
