@@ -37,8 +37,8 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     //     V.push_back(vector<double>(row.begin(), row.end()));
     // }
     //
-    // std::vector<std::vector<double>> W_original = W;
-    // std::vector<std::vector<double>> V_original = V;
+    std::vector<std::vector<double>> W_original = W;
+    std::vector<std::vector<double>> V_original = V;
 
     local_model.init_training_model(trainFile, V, W);
 
@@ -46,8 +46,8 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
 
     local_model.get_weights(W, V);
     std::cout << "after get weights\n";
-    calc_gradient(W, weights.W);
-    calc_gradient(V, weights.V);
+    calc_gradient(W, W_original);
+    calc_gradient(V, V_original);
     std::cout << "after calc_gradient\n";
 
     _return.dW = W;
