@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
 
         // Call the server's ping() function
 
-        double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_node.txt");
+        double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_nodes.txt");
 	      std::cout << "Connected to server!" << std::endl;
 
 	      std::cout << "Validation error: " << res << std::endl;
