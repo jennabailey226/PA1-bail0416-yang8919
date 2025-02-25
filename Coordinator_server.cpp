@@ -75,8 +75,8 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     std::vector<std::vector<double>> V;
 
     almighty.get_weights(shared_weights.V, shared_weights.W);
-    std::cout << "v's size" << shared_gradient_V.size() << endl;
-    std::cout << "w's size" << shared_gradient_W.size() << endl;
+    std::cout << "v's size" << shared_weights.V.size() << endl;
+    std::cout << "w's size" << shared_weights.W.size() << endl;
 
     // // Convert vector<vector<double>> to list<list<double>>
     // for (const auto& row:W) {
