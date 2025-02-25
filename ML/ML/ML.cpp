@@ -41,20 +41,6 @@ void sum_matricies(vector<vector<double>>& _ret, vector<vector<double>>& mat)
 // ASSUMES the two matricies are the same size
 void calc_gradient(vector<vector<double>>& curr, vector<vector<double>>& orig)
 {
-    if (curr.empty() || orig.empty()) {
-        std::cerr << "Error: curr or orig is empty! curr.size()=" << curr.size()
-                  << ", orig.size()=" << orig.size() << std::endl;
-        exit(1);  // Exit to prevent further crashes
-    }
-
-    if (curr.size() != orig.size() || curr[0].size() != orig[0].size()) {
-        std::cerr << "Error: curr and orig sizes do not match! curr: "
-                  << curr.size() << "x" << curr[0].size()
-                  << ", orig: " << orig.size() << "x" << orig[0].size() << std::endl;
-        exit(1);
-    }
-    cout << "curr size: " << curr.size() << " " << curr[0].size();
-    cout << " orig size: " << orig.size() << " " << orig[0].size() << endl;
     int rows = curr.size();
     int cols = curr[0].size();
     for(int i = 0; i < rows; i++)
@@ -165,7 +151,7 @@ double mlp::train(double eta, int epochs)
         // backwards propogate
         // this sets _dV and _dW
         backward_propogate(_dV, _dW, eta);
-
+        
         // update the weights from backwards propogation
         update_weights(_dV, _dW);
 
@@ -231,7 +217,7 @@ vector<int> mlp::predict(string fname)
         return predictions;
 
     // do forward_propogation once to calculate Y and Z
-    forward_propogate(_X);
+    forward_propogate(_X); 
     for(int i = 0; i < n; i++)
     {
         int max_idx = 0;
@@ -269,7 +255,6 @@ void mlp::set_weights(vector<vector<double>>& _V, vector<vector<double>>& _W)
 // Copies W and V to input _V and _W
 void mlp::get_weights(vector<vector<double>>& _V, vector<vector<double>>& _W)
 {
-    cout << "V's size: " << V.size() << " W's size: " << W.size() << endl;
     _V = V;
     _W = W;
 }
@@ -281,7 +266,7 @@ void mlp::update_weights(vector<vector<double>>& _dV, vector<vector<double>>& _d
     for(int i = 0; i < h + 1; i++)
         for(int j = 0; j < k; j++)
             V[i][j] += _dV[i][j];
-
+    
     for(int i = 0; i < d + 1; i++)
         for(int j = 0; j < h; j++)
             W[i][j] += _dW[i][j];
@@ -343,7 +328,7 @@ void mlp::forward_propogate(vector<vector<int>>& _X)
             O[i][j] = dot;
         }
     }
-
+    
     // Y(i,j) = 1 / sum(exp(O(i,:)-O(i,j)));
     for(int i = 0; i < _n; i++)
     {
@@ -407,12 +392,12 @@ void mlp::backward_propogate(vector<vector<double>>& _dV, vector<vector<double>>
             for(int m = 0; m < d; m++)
                 dot += X[i][m] * W[m+1][j];
             dot += W[0][j];
-
+            
             if(dot >= 0)
                 XW[i][j] = 1;
         }
     }
-
+    
     // S = (R * Vt(no bias) .* XW)'
     // [n x k][k x h]  -> [h x n]
     vector<vector<double>> S;
@@ -442,7 +427,7 @@ void mlp::backward_propogate(vector<vector<double>>& _dV, vector<vector<double>>
             _dW[i+1][j] = eta * dot;
         }
     }
-
+    
     // update dW[0][:]
     for(int i = 0; i < h; i++)
     {
@@ -450,7 +435,7 @@ void mlp::backward_propogate(vector<vector<double>>& _dV, vector<vector<double>>
         for(int j = 0; j < n; j++)
             sum += S[i][j];
         _dW[0][i] = eta * sum;
-    }
+    }   
 }
 
 
@@ -476,7 +461,7 @@ bool mlp::read_data(vector<vector<int>>& _X, vector<int>& _X_labels, string fnam
     // parse lines
     string line;
     while(getline(data, line))
-    {
+    {   
         string sdata = "";
         vector<int> datapoint;
         for(char c : line)
