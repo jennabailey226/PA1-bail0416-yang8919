@@ -269,6 +269,7 @@ void mlp::set_weights(vector<vector<double>>& _V, vector<vector<double>>& _W)
 // Copies W and V to input _V and _W
 void mlp::get_weights(vector<vector<double>>& _V, vector<vector<double>>& _W)
 {
+    cout << "V's size: " << V.size() << " W's size: " << W.size() << endl;
     _V = V;
     _W = W;
 }
