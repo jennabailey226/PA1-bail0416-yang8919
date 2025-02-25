@@ -134,7 +134,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
         worker.join();
     }
     almighty.update_weights(shared_gradient_V, shared_gradient_W);
-    double validation_error = almighty.validate(dir + "/validate_letters.txt");
+    double validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
     // std::cout << "Validation error: " << validation_error << endl;
     return validation_error;
   }

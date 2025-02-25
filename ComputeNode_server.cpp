@@ -36,7 +36,7 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     double error = local_model.train(eta, epochs);
 
     local_model.get_weights(W, V);
-    
+
     calc_gradient(W, W_original);
     calc_gradient(V, V_original);
 
@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  int port = std::__cxx11::stoi(argv[1]);
-  double load_probability = std::__cxx11::stod(argv[2]);
+  int port = std::stoi(argv[1]);
+  double load_probability = std::stod(argv[2]);
   srand(time(NULL));
   ::std::shared_ptr<ComputeNodeHandler> handler(new ComputeNodeHandler());
   ::std::shared_ptr<TProcessor> processor(new ComputeNodeProcessor(handler));
