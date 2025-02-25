@@ -65,7 +65,7 @@ mlp::mlp()
 // Init model with labeled data, random weights
 bool mlp::init_training_random(string fname, int _k, int _h)
 {
-    cout << "Initializing training from file: " << filename << std::endl;
+    cout << "Initializing training from file: " << fname << std::endl;
     // sets X and X_labels
     // also sets n and d
     if(!read_data(X, X_labels, fname, true))
