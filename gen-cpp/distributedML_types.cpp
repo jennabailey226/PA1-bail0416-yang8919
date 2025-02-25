@@ -409,6 +409,10 @@ void ComputeNodeInfo::__set_ip(const std::string& val) {
 void ComputeNodeInfo::__set_port(const int32_t val) {
   this->port = val;
 }
+
+void ComputeNodeInfo::__set_load_probability(const double val) {
+  this->load_probability = val;
+}
 std::ostream& operator<<(std::ostream& out, const ComputeNodeInfo& obj)
 {
   obj.printTo(out);
@@ -453,6 +457,14 @@ uint32_t ComputeNodeInfo::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
+          xfer += iprot->readDouble(this->load_probability);
+          this->__isset.load_probability = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -478,6 +490,10 @@ uint32_t ComputeNodeInfo::write(::apache::thrift::protocol::TProtocol* oprot) co
   xfer += oprot->writeI32(this->port);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("load_probability", ::apache::thrift::protocol::T_DOUBLE, 3);
+  xfer += oprot->writeDouble(this->load_probability);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -487,17 +503,20 @@ void swap(ComputeNodeInfo &a, ComputeNodeInfo &b) {
   using ::std::swap;
   swap(a.ip, b.ip);
   swap(a.port, b.port);
+  swap(a.load_probability, b.load_probability);
   swap(a.__isset, b.__isset);
 }
 
 ComputeNodeInfo::ComputeNodeInfo(const ComputeNodeInfo& other52) {
   ip = other52.ip;
   port = other52.port;
+  load_probability = other52.load_probability;
   __isset = other52.__isset;
 }
 ComputeNodeInfo& ComputeNodeInfo::operator=(const ComputeNodeInfo& other53) {
   ip = other53.ip;
   port = other53.port;
+  load_probability = other53.load_probability;
   __isset = other53.__isset;
   return *this;
 }
@@ -506,6 +525,7 @@ void ComputeNodeInfo::printTo(std::ostream& out) const {
   out << "ComputeNodeInfo(";
   out << "ip=" << to_string(ip);
   out << ", " << "port=" << to_string(port);
+  out << ", " << "load_probability=" << to_string(load_probability);
   out << ")";
 }
 

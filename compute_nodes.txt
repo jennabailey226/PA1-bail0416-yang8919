@@ -1,1 +1,1 @@
-csel-cuda-01.cselabs.umn.edu, 9091, 0.8
+csel-cuda-01s, 9091, 0.8

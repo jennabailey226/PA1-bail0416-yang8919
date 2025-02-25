@@ -12,8 +12,9 @@ struct Gradient {
 
 // Structure for compute node information (IP and port)
 struct ComputeNodeInfo {
-    1: string ip,  // IP address of compute node
-    2: i32 port    // Port number of compute node
+    1: string ip,               // IP address of compute node
+    2: i32 port,                // Port number of compute node
+    3: double load_probability  // Load Probability of compute node
 }
 
 service Coordinator {
@@ -25,7 +26,7 @@ service Coordinator {
         3: i32 epochs,                // Training epochs per round
         4: i32 h,                     // Number of hidden units
         5: i32 k,                     // Number of output units
-        6: double eta                 // Learning rate
+        6: double eta,                // Learning rate
         7: string compute_nodes_file  // Compute Nodes File
     )
 }

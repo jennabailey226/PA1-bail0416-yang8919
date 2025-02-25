@@ -124,9 +124,10 @@ void swap(Gradient &a, Gradient &b);
 std::ostream& operator<<(std::ostream& out, const Gradient& obj);
 
 typedef struct _ComputeNodeInfo__isset {
-  _ComputeNodeInfo__isset() : ip(false), port(false) {}
+  _ComputeNodeInfo__isset() : ip(false), port(false), load_probability(false) {}
   bool ip :1;
   bool port :1;
+  bool load_probability :1;
 } _ComputeNodeInfo__isset;
 
 class ComputeNodeInfo : public virtual ::apache::thrift::TBase {
@@ -136,12 +137,14 @@ class ComputeNodeInfo : public virtual ::apache::thrift::TBase {
   ComputeNodeInfo& operator=(const ComputeNodeInfo&);
   ComputeNodeInfo() noexcept
                   : ip(),
-                    port(0) {
+                    port(0),
+                    load_probability(0) {
   }
 
   virtual ~ComputeNodeInfo() noexcept;
   std::string ip;
   int32_t port;
+  double load_probability;
 
   _ComputeNodeInfo__isset __isset;
 
@@ -149,11 +152,15 @@ class ComputeNodeInfo : public virtual ::apache::thrift::TBase {
 
   void __set_port(const int32_t val);
 
+  void __set_load_probability(const double val);
+
   bool operator == (const ComputeNodeInfo & rhs) const
   {
     if (!(ip == rhs.ip))
       return false;
     if (!(port == rhs.port))
+      return false;
+    if (!(load_probability == rhs.load_probability))
       return false;
     return true;
   }
