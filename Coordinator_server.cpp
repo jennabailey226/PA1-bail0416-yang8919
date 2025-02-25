@@ -67,8 +67,9 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
     // Initialize the global model
     mlp almighty;
-    // only read the input data's format, weights are random
-    almighty.init_training_random(dir + "/train_letters1.txt", k, h);
+    
+    // filename's path is for ML.cpp
+    almighty.init_training_random("letters/train_letters1.txt", k, h);
 
     Weights shared_weights;
     std::vector<std::vector<double>> W;

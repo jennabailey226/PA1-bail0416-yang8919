@@ -65,6 +65,7 @@ mlp::mlp()
 // Init model with labeled data, random weights
 bool mlp::init_training_random(string fname, int _k, int _h)
 {
+    cout << "Initializing training from file: " << filename << std::endl;
     // sets X and X_labels
     // also sets n and d
     if(!read_data(X, X_labels, fname, true))
@@ -151,7 +152,7 @@ double mlp::train(double eta, int epochs)
         // backwards propogate
         // this sets _dV and _dW
         backward_propogate(_dV, _dW, eta);
-        
+
         // update the weights from backwards propogation
         update_weights(_dV, _dW);
 
@@ -217,7 +218,7 @@ vector<int> mlp::predict(string fname)
         return predictions;
 
     // do forward_propogation once to calculate Y and Z
-    forward_propogate(_X); 
+    forward_propogate(_X);
     for(int i = 0; i < n; i++)
     {
         int max_idx = 0;
@@ -266,7 +267,7 @@ void mlp::update_weights(vector<vector<double>>& _dV, vector<vector<double>>& _d
     for(int i = 0; i < h + 1; i++)
         for(int j = 0; j < k; j++)
             V[i][j] += _dV[i][j];
-    
+
     for(int i = 0; i < d + 1; i++)
         for(int j = 0; j < h; j++)
             W[i][j] += _dW[i][j];
@@ -328,7 +329,7 @@ void mlp::forward_propogate(vector<vector<int>>& _X)
             O[i][j] = dot;
         }
     }
-    
+
     // Y(i,j) = 1 / sum(exp(O(i,:)-O(i,j)));
     for(int i = 0; i < _n; i++)
     {
@@ -392,12 +393,12 @@ void mlp::backward_propogate(vector<vector<double>>& _dV, vector<vector<double>>
             for(int m = 0; m < d; m++)
                 dot += X[i][m] * W[m+1][j];
             dot += W[0][j];
-            
+
             if(dot >= 0)
                 XW[i][j] = 1;
         }
     }
-    
+
     // S = (R * Vt(no bias) .* XW)'
     // [n x k][k x h]  -> [h x n]
     vector<vector<double>> S;
@@ -427,7 +428,7 @@ void mlp::backward_propogate(vector<vector<double>>& _dV, vector<vector<double>>
             _dW[i+1][j] = eta * dot;
         }
     }
-    
+
     // update dW[0][:]
     for(int i = 0; i < h; i++)
     {
@@ -435,7 +436,7 @@ void mlp::backward_propogate(vector<vector<double>>& _dV, vector<vector<double>>
         for(int j = 0; j < n; j++)
             sum += S[i][j];
         _dW[0][i] = eta * sum;
-    }   
+    }
 }
 
 
@@ -461,7 +462,7 @@ bool mlp::read_data(vector<vector<int>>& _X, vector<int>& _X_labels, string fnam
     // parse lines
     string line;
     while(getline(data, line))
-    {   
+    {
         string sdata = "";
         vector<int> datapoint;
         for(char c : line)
