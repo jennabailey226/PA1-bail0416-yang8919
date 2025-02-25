@@ -69,7 +69,25 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     almighty.init_training_random(dir + "/train_letters1.txt", k, h);
 
     Weights shared_weights;
-    almighty.get_weights(shared_weights.V, shared_weights.W);
+    std::vector<vector<double>> W;
+    std::vector<vector<double>> V;
+
+    // Convert Thrift list<list<double>> to vector<vector<double>>
+    for (const auto& row:shared_weights.W) {
+        W.push_back(vector<double>(row.begin(), row.end()));
+    }
+    for (const auto& row:shared_weights.V) {
+        V.push_back(vector<double>(row.begin(), row.end()));
+    }
+    almighty.get_weights(V, W);
+
+    // Convert vector<vector<double>> to list<list<double>>
+    for (const auto& row:W) {
+        shared_weights.W.push_back(list<double>(row.begin(), row.end()));
+    }
+    for (const auto& row:V) {
+        shared_weights.V.push_back(list<double>(row.begin(), row.end()));
+    }
 
     queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
@@ -85,6 +103,8 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
     std::vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
     std::vector<vector<double>> shared_gradient_W(17, vector<double>(h, 0));
+
+    // thread function
     auto thread_func = [&](int node_index) {
       while (true){
         if (work_queue.empty()) {
@@ -118,7 +138,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     for (int i = 0; i < compute_nodes.size(); i++) {
         workers.emplace_back(thread_func, i);
     }
-    for (auto& worker : workers) {
+    for (auto& worker:workers) {
         worker.join();
     }
     almighty.update_weights(shared_gradient_V, shared_gradient_W);

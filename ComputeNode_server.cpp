@@ -26,8 +26,17 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     std::cout << "Compute Node training " << trainFile << std::endl;
     mlp local_model;
 
-    std::vector<vector<double>> W = weights.W;
-    std::vector<vector<double>> V = weights.V;
+    std::vector<vector<double>> W;
+    std::vector<vector<double>> V;
+
+    // Convert Thrift list<list<double>> to vector<vector<double>>
+    for (const auto& row:weights.W) {
+        W.push_back(vector<double>(row.begin(), row.end()));
+    }
+    for (const auto& row:weights.V) {
+        V.push_back(vector<double>(row.begin(), row.end()));
+    }
+
     std::vector<vector<double>> W_original = W;
     std::vector<vector<double>> V_original = V;
 
@@ -41,8 +50,13 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     calc_gradient(V, V_original);
     std::cout << "after calc_gradient\n";
 
-    _return.dV = V;
-    _return.dW = W;
+    // Convert vector<vector<double>> to list<list<double>>
+    for (const auto& row:W) {
+        _return.dW.push_back(list<double>(row.begin(), row.end()));
+    }
+    for (const auto& row:V) {
+        _return.dV.push_back(list<double>(row.begin(), row.end()));
+    }
   }
 
 };

@@ -1,6 +1,0 @@
-/home/yang8919/PA1-bail0416-yang8919-yahui/build/CMakeFiles/exgencpp.dir
-/home/yang8919/PA1-bail0416-yang8919-yahui/build/CMakeFiles/ml.dir
-/home/yang8919/PA1-bail0416-yang8919-yahui/build/CMakeFiles/coordinator.dir
-/home/yang8919/PA1-bail0416-yang8919-yahui/build/CMakeFiles/computeNode.dir
-/home/yang8919/PA1-bail0416-yang8919-yahui/build/CMakeFiles/edit_cache.dir
-/home/yang8919/PA1-bail0416-yang8919-yahui/build/CMakeFiles/rebuild_cache.dir

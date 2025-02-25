@@ -1,2 +1,0 @@
-/usr/bin/ar qc libexgencpp.a "CMakeFiles/exgencpp.dir/gen-cpp/Coordinator.cpp.o" "CMakeFiles/exgencpp.dir/gen-cpp/ComputeNode.cpp.o" "CMakeFiles/exgencpp.dir/gen-cpp/distributedML_types.cpp.o"
-/usr/bin/ranlib libexgencpp.a
