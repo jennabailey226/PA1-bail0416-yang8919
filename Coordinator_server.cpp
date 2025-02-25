@@ -72,13 +72,6 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     std::vector<vector<double>> W;
     std::vector<vector<double>> V;
 
-    // Convert Thrift list<list<double>> to vector<vector<double>>
-    for (const auto& row:shared_weights.W) {
-        W.push_back(vector<double>(row.begin(), row.end()));
-    }
-    for (const auto& row:shared_weights.V) {
-        V.push_back(vector<double>(row.begin(), row.end()));
-    }
     almighty.get_weights(V, W);
 
     // Convert vector<vector<double>> to list<list<double>>
