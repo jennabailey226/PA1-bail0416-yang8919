@@ -6,6 +6,8 @@
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <iostream>
+#include "./ML/ML/ML.hpp"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -21,13 +23,13 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
   }
 
   void trainModel(Gradient& _return, const Weights& weights, const std::string& trainFile, const double eta, const int32_t epochs) {
-    cout << "Compute Node training " << tranFile << endl;
+    std::cout << "Compute Node training " << trainFile << std::endl;
     mlp local_model;
 
-    vector<vector<double>> W = weights.W;
-    vector<vector<double>> V = weights.V;
-    vector<vector<double>> W_original = W;
-    vector<vector<double>> V_original = V;
+    std::vector<vector<double>> W = weights.W;
+    std::vector<vector<double>> V = weights.V;
+    std::vector<vector<double>> W_original = W;
+    std::vector<vector<double>> V_original = V;
     local_model.init_training_model(trainFile, V, W);
 
     double error = local_model.train(eta, epochs);
@@ -44,12 +46,12 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
 
 int main(int argc, char **argv) {
   if (argc != 3) {
-    cerr << "Usage: ./compute_node <port> <load_probability>" << endl;
-    return 1;
+    std::cout << "Usage: ./compute_node <port> <load_probability>" << std::endl;
+    exit(1);
   }
 
-  int port = stoi(argv[1]);
-  double load_probability = stod(argv[2]);
+  int port = std::__cxx11::stoi(argv[1]);
+  double load_probability = std::__cxx11::stod(argv[2]);
   srand(time(NULL));
   ::std::shared_ptr<ComputeNodeHandler> handler(new ComputeNodeHandler());
   ::std::shared_ptr<TProcessor> processor(new ComputeNodeProcessor(handler));

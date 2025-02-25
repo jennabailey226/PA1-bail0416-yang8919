@@ -7,7 +7,12 @@
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <thrift/transport/TSocket.h>
+#include <thrift/transport/TTransportUtils.h>
 #include <thread>
+#include <queue>
+#include <sstream>
+#include "./ML/ML/ML.hpp"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -23,18 +28,18 @@ class CoordinatorHandler : virtual public CoordinatorIf {
   }
 
   void load_compute_nodes(std::vector<ComputeNodeInfo> & _return, const std::string& filename) {
-    ifstream file(filename);
+    std::ifstream file(filename);
     if (!file.is_open()) {
-      cerr << "Error: Unable to open file " << filename << endl;
-      return;
+      std::cout << "Error: Unable to open file " << filename << std::endl;
+      exit(1);
     }
-    string line;
+    std::string line;
     while (getline(file, line)) {
       ComputeNodeInfo in;
-      stringstream ss(line);
+      std::stringstream ss(line);
       char delimiter;
       if (!(ss >> in.ip >> delimiter >> in.port) || delimiter != ',') {
-        cerr << "Error: Invalid format in file: " << line << endl;
+        std::cout << "Error: Invalid format in file: " << line << std::endl;
         exit(1);
       }
       _return.emplace_back(in);
@@ -43,8 +48,8 @@ class CoordinatorHandler : virtual public CoordinatorIf {
   }
 
   double train(const std::string& dir, const int32_t rounds, const int32_t epochs, const int32_t h, const int32_t k, const double eta, const std::string& compute_nodes_file) {
-    cout << "Coordinator: rounds: " << rounds << " epocks: " << epochs << " hidden unit: "
-      << h << " output unit: " << k << " learning rate: " << eta << endl;
+    std::cout << "Coordinator: rounds: " << rounds << " epocks: " << epochs << " hidden unit: "
+      << h << " output unit: " << k << " learning rate: " << eta << std::endl;
 
     // Initialize the global model
     mlp almighty;
@@ -54,30 +59,30 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     Weights shared_weights;
     almighty.get_weights(shared_weights.V, shared_weights.W);
 
-    queue<string> work_queue;
+    queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
-        work_queue.push(dir + "/train_letters" + to_string(i) + ".txt");
+        work_queue.push(dir + "/train_letters" + std::__cxx11::to_string(i) + ".txt");
     }
 
-    vector<ComputeNodeInfo> compute_nodes;
+    std::vector<ComputeNodeInfo> compute_nodes;
     load_compute_nodes(compute_nodes, compute_nodes_file);
     if (compute_nodes.empty()) {
-      cout << "Error: No compute nodes found in " << compute_nodes_file << endl;
+      std::cout << "Error: No compute nodes found in " << compute_nodes_file << std::endl;
       exit(1);
     }
 
-    vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
-    vector<vector<double>> shared_gradient_W(17, vector<double>(h, 0));
+    std::vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
+    std::vector<vector<double>> shared_gradient_W(17, vector<double>(h, 0));
     auto thread_func = [&](int node_index) {
       while (true){
         if (work_queue.empty()) {
           return;
         }
-        string training_file = work_queue.front();
+        std::string training_file = work_queue.front();
         work_queue.pop();
-        boost::shared_ptr<TTransport> socket(new TSocket(compute_nodes[node_index].ip, compute_nodes[node_index].port));
-        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+        std::shared_ptr<TTransport> socket(new TSocket(compute_nodes[node_index].ip, compute_nodes[node_index].port));
+        std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+        std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
         ComputeNodeClient client(protocol);
 
         transport->open();
@@ -85,19 +90,19 @@ class CoordinatorHandler : virtual public CoordinatorIf {
         client.trainModel(grad, shared_weights, training_file, eta, epochs);
         transport->close();
 
-        for (size_t i = 0; i < shared_gradient_V.size(); i++) {
-          for (size_t j = 0; j < shared_gradient_V[i].size(); j++) {
+        for (int i = 0; i < shared_gradient_V.size(); i++) {
+          for (int j = 0; j < shared_gradient_V[i].size(); j++) {
               shared_gradient_V[i][j] += grad.dV[i][j];
           }
         }
-        for (size_t i = 0; i < shared_gradient_W.size(); i++) {
-          for (size_t j = 0; j < shared_gradient_W[i].size(); j++) {
+        for (int i = 0; i < shared_gradient_W.size(); i++) {
+          for (int j = 0; j < shared_gradient_W[i].size(); j++) {
               shared_gradient_W[i][j] += grad.dW[i][j];
           }
         }
       }
     };
-    vector<thread> workers;
+    std::vector<std::thread> workers;
     for (int i = 0; i < compute_nodes.size(); i++) {
         workers.emplace_back(thread_func, i);
     }
@@ -114,11 +119,11 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
 int main(int argc, char **argv) {
   if (argc != 3) {
-      cout << "Usage: ./coordinator <port> <scheduling_policy>" << endl;
+      std::cout << "Usage: ./coordinator <port> <scheduling_policy>" << std::endl;
       exit(1);
   }
-  int port = stoi(argv[1]);
-  string policy = argv[2];
+  int port = std::__cxx11::stoi(argv[1]);
+  std::string policy = argv[2];
   ::std::shared_ptr<CoordinatorHandler> handler(new CoordinatorHandler());
   ::std::shared_ptr<TProcessor> processor(new CoordinatorProcessor(handler));
   ::std::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));

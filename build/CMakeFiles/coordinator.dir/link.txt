@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/coordinator.dir/Coordinator_server.cpp.o -o coordinator  -Wl,-rpath,/home/yang8919/thrift-0.19.0/lib/cpp/.libs libexgencpp.a libml.a /home/yang8919/thrift-0.19.0/lib/cpp/.libs/libthrift.so 

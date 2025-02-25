@@ -27,11 +27,17 @@ set(exgencpp_SOURCES
 )
 add_library(exgencpp STATIC ${exgencpp_SOURCES})
 
+set(ml_SOURCES ML/ML/ML.cpp)
+add_library(ml STATIC ${ml_SOURCES})
+
 # Compile server executable
 add_executable(coordinator Coordinator_server.cpp)
 add_executable(computeNode ComputeNode_server.cpp)
 target_link_libraries(coordinator exgencpp)
+target_link_libraries(coordinator ml)
 target_link_libraries(computeNode exgencpp)
+target_link_libraries(computeNode ml)
+
 
 # CHANGEME set thrift library location, link to `libthrift.so` or `libthrift.a`
 # The library can be found at your thrift install location: /thrift-0.19.0/lib/cpp/.libs/libthrift.so
