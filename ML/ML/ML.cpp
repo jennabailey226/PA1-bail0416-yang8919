@@ -41,6 +41,18 @@ void sum_matricies(vector<vector<double>>& _ret, vector<vector<double>>& mat)
 // ASSUMES the two matricies are the same size
 void calc_gradient(vector<vector<double>>& curr, vector<vector<double>>& orig)
 {
+  if (curr.empty() || orig.empty()) {
+      std::cerr << "Error: curr or orig is empty! curr.size()=" << curr.size()
+                << ", orig.size()=" << orig.size() << std::endl;
+      exit(1);  // Exit to prevent further crashes
+  }
+
+  if (curr.size() != orig.size() || curr[0].size() != orig[0].size()) {
+      std::cerr << "Error: curr and orig sizes do not match! curr: "
+                << curr.size() << "x" << curr[0].size()
+                << ", orig: " << orig.size() << "x" << orig[0].size() << std::endl;
+      exit(1);
+  }
     cout << "curr size: " << curr.size() << " " << curr[0].size();
     cout << " orig size: " << orig.size() << " " << orig[0].size() << endl;
     int rows = curr.size();
