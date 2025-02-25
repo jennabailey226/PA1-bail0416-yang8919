@@ -38,8 +38,8 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
 
     double error = local_model.train(eta, epochs);
 
-    local_model.get_weights(W, V);
-    std::cout << "before calc\n";
+    local_model.get_weights(V, W);
+
     std::cout << "W's size: " << W.size() << " V's size: " << V.size() << std::endl;
     std::cout << "o W's size: " << W_original.size() << " o V's size: " << V_original.size() << std::endl;
     calc_gradient(W, W_original);
