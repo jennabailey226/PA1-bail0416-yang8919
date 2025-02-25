@@ -74,24 +74,20 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     std::vector<std::vector<double>> W;
     std::vector<std::vector<double>> V;
 
-    std::list<std::list<double>> W_list;
-    std::list<std::list<double>> V_list;
 
-    almighty.get_weights(V, W);
+    almighty.get_weights(shared_weights.V, shared_weights.W);
 
-    // Convert vector<vector<double>> to list<list<double>>
-    for (const auto& row:W) {
-        W_list.push_back(list<double>(row.begin(), row.end()));
-    }
-    for (const auto& row:V) {
-        V_list.push_back(list<double>(row.begin(), row.end()));
-    }
-    shared_weights.W = W_list;
-    shared_weights.V = V_list;
+    // // Convert vector<vector<double>> to list<list<double>>
+    // for (const auto& row:W) {
+    //     shared_weights.W.push_back(list<double>(row.begin(), row.end()));
+    // }
+    // for (const auto& row:V) {
+    //     shared_weights.V.push_back(list<double>(row.begin(), row.end()));
+    // }
 
     queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
-        work_queue.push(dir + "/train_letters" + std::__cxx11::to_string(i) + ".txt");
+        work_queue.push(dir + "/train_letters" + std::to_string(i) + ".txt");
     }
 
     std::vector<ComputeNodeInfo> compute_nodes;
@@ -143,7 +139,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     }
     almighty.update_weights(shared_gradient_V, shared_gradient_W);
     double validation_error = almighty.validate(dir + "/validate_letters.txt");
-    //cout << "Validation error: " << validation_error << endl;
+    // std::cout << "Validation error: " << validation_error << endl;
     return validation_error;
   }
 
@@ -154,7 +150,7 @@ int main(int argc, char **argv) {
       std::cout << "Usage: ./coordinator <port> <scheduling_policy>" << std::endl;
       exit(1);
   }
-  int port = std::__cxx11::stoi(argv[1]);
+  int port = std::stoi(argv[1]);
   std::string policy = argv[2];
   ::std::shared_ptr<CoordinatorHandler> handler(new CoordinatorHandler());
   ::std::shared_ptr<TProcessor> processor(new CoordinatorProcessor(handler));
