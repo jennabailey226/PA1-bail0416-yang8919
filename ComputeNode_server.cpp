@@ -30,9 +30,12 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     std::vector<vector<double>> V = weights.V;
     std::vector<vector<double>> W_original = W;
     std::vector<vector<double>> V_original = V;
+    std::cout << "start init_training_model\n";
     local_model.init_training_model(trainFile, V, W);
+    std::cout << "after init_training_model\n";
 
     double error = local_model.train(eta, epochs);
+    std::cout << "after train\n";
 
     local_model.get_weights(W, V);
     calc_gradient(W, W_original);
