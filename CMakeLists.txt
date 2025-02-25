@@ -7,7 +7,7 @@
 ## call cmake - cmake ..
 ## call make - make
 
-##cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.28)
 project(thrfit_distributedML)
 
 # Make sure gen-cpp files can be included
