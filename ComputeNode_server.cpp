@@ -55,7 +55,6 @@ int main(int argc, char **argv) {
 
   int port = std::stoi(argv[1]);
   double load_probability = std::stod(argv[2]);
-  srand(time(NULL));
   ::std::shared_ptr<ComputeNodeHandler> handler(new ComputeNodeHandler());
   ::std::shared_ptr<TProcessor> processor(new ComputeNodeProcessor(handler));
   ::std::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
