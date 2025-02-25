@@ -31,15 +31,18 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     std::vector<std::vector<double>> W_original = W;
     std::vector<std::vector<double>> V_original = V;
 
-    local_model.init_training_model(trainFile, V, W);
+    if (!local_model.init_training_model(trainFile, V, W)){
+      std::cout << "Can't open the training file in compute node\n";
+      exit(1);
+    }
 
     double error = local_model.train(eta, epochs);
 
     local_model.get_weights(W, V);
-
+    std::cout << "before calc\n"
     calc_gradient(W, W_original);
     calc_gradient(V, V_original);
-
+    std::cout << "after calc\n"
 
     _return.dW = W;
     _return.dV = V;

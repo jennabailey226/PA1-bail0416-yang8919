@@ -73,17 +73,15 @@ bool mlp::init_training_random(string fname, int _k, int _h)
         initialized = false;
         return initialized;
     }
-    cout << "test\n";
+
     n = X.size();
-    cout << "x.size(): " << X.size() << endl;
     d = X[0].size();
-    cout << "test00\n";
 
     // Initialize weights
     // set k and h based on inputs
     k = _k;
     h = _h;
-    cout << "test1\n";
+
     // randomly fill W and V
     srand(0);  // seed for reproducability
 
@@ -94,7 +92,6 @@ bool mlp::init_training_random(string fname, int _k, int _h)
             V[i][j] = -0.01 + (0.02 * ((double) rand() / RAND_MAX));
 
     W.clear();
-    cout << "test2\n";
     W = vector<vector<double>>(d+1, vector<double>(h,0));
     for(int i = 0; i < d + 1; i++)
         for(int j = 0; j < h; j++)
@@ -102,7 +99,7 @@ bool mlp::init_training_random(string fname, int _k, int _h)
 
     // Initialize Y and Z via one forwards propogation
     forward_propogate(X);
-    cout << "test3\n";
+    
     initialized = true;
     return initialized;
 }

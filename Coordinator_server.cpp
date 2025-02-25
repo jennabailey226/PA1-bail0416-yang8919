@@ -76,9 +76,9 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     Weights shared_weights;
     // std::vector<std::vector<double>> W;
     // std::vector<std::vector<double>> V;
-    std::cout << "before get_weights\n";
+
     almighty.get_weights(shared_weights.V, shared_weights.W);
-    std::cout << "after get_weights\n";
+    
     // std::cout << "v's size" << V.size() << endl;
     // std::cout << "w's size" << W.size() << endl;
 
