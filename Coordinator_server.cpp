@@ -28,7 +28,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
   }
 
   void load_compute_nodes(std::vector<ComputeNodeInfo> & _return, const std::string& filename) {
-    std::ifstream file(filename);
+    std::ifstream file("/home/yang8919/PA1-bail0416-yang8919-yahui/" + filename);
     if (!file.is_open()) {
       std::cout << "Error: Unable to open file " << filename << std::endl;
       exit(1);
