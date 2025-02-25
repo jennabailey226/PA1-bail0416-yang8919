@@ -87,11 +87,13 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     }
 
     std::vector<ComputeNodeInfo> compute_nodes;
+    std::cout << "before load_compute_nodes\n";
     load_compute_nodes(compute_nodes, dir + "/" + compute_nodes_file);
     if (compute_nodes.empty()) {
       std::cout << "Error: No compute nodes found in " << compute_nodes_file << std::endl;
       exit(1);
     }
+    std::cout << "after load_compute_nodes\n";
 
     std::vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
     std::vector<vector<double>> shared_gradient_W(17, vector<double>(h, 0));
