@@ -83,7 +83,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
     queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
-        work_queue.push(dir + "/ML/ML/letters/train-letters" + std::to_string(i) + ".txt");
+        work_queue.push(dir + "/ML/ML/letters/train_letters" + std::to_string(i) + ".txt");
     }
 
     std::vector<ComputeNodeInfo> compute_nodes;
