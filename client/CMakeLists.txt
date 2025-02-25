@@ -27,12 +27,16 @@ set(exgencpp_SOURCES
 )
 add_library(exgencpp STATIC ${exgencpp_SOURCES})
 
+set(ml_SOURCES ML/ML/ML.cpp)
+add_library(ml STATIC ${ml_SOURCES})
 
 # Compile server executable
 add_executable(coordinator ../Coordinator_server.cpp)
 add_executable(client client.cpp)
 target_link_libraries(coordinator exgencpp)
+target_link_libraries(coordinator ml)
 target_link_libraries(client exgencpp)
+target_link_libraries(client ml)
 
 
 # CHANGEME set thrift library location, link to `libthrift.so` or `libthrift.a`
