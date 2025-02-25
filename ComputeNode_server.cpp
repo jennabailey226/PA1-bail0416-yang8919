@@ -36,10 +36,10 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
     double error = local_model.train(eta, epochs);
 
     local_model.get_weights(W, V);
-    std::cout << "after get weights\n";
+    
     calc_gradient(W, W_original);
     calc_gradient(V, V_original);
-    std::cout << "after calc_gradient\n";
+
 
     _return.dW = W;
     _return.dV = V;
