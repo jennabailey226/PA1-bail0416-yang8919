@@ -12,6 +12,8 @@
 #include <thread>
 #include <queue>
 #include <sstream>
+#include <list>
+#include <vector>
 #include "./ML/ML/ML.hpp"
 
 using namespace ::apache::thrift;
