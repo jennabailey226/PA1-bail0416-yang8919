@@ -71,18 +71,23 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     almighty.init_training_random(dir + "/train_letters1.txt", k, h);
 
     Weights shared_weights;
-    std::vector<vector<double>> W;
-    std::vector<vector<double>> V;
+    std::vector<std::vector<double>> W;
+    std::vector<std::vector<double>> V;
+
+    std::list<std::list<double>> W_list;
+    std::list<std::list<double>> V_list;
 
     almighty.get_weights(V, W);
 
     // Convert vector<vector<double>> to list<list<double>>
     for (const auto& row:W) {
-        shared_weights.W.push_back(list<double>(row.begin(), row.end()));
+        W_list.push_back(list<double>(row.begin(), row.end()));
     }
     for (const auto& row:V) {
-        shared_weights.V.push_back(list<double>(row.begin(), row.end()));
+        V_list.push_back(list<double>(row.begin(), row.end()));
     }
+    shared_weights.W = W_list;
+    shared_weights.V = V_list;
 
     queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
