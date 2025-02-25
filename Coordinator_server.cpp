@@ -143,7 +143,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     std::cout << "coordinator5\n";
     double validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
     std::cout << "coordinator6\n";
-    // std::cout << "Validation error: " << validation_error << endl;
+    std::cout << "Validation error: " << validation_error << endl;
     return validation_error;
   }
 
