@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
         transport->open();
 
         // Call the server's ping() function
-        string dir = "./ML/ML/letters";
+        string dir = "home/yang8919/PA1-bail0416-yang8919-yahui";
         double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_node.txt");
         cout << "Connected to server!" << endl;
 

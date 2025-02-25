@@ -69,7 +69,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     mlp almighty;
 
     // filename's path is for ML.cpp
-    if (!almighty.init_training_random("/home/yang8919/PA1-bail0416-yang8919-yahui/ML/ML/letters/train_letters1.txt", k, h)){
+    if (!almighty.init_training_random(dir + "/ML/ML/letters/train_letters1.txt", k, h)){
       std::cout << "Can't open the training file\n";
       exit(1);
     }
@@ -84,11 +84,11 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
     queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
-        work_queue.push(dir + "/train_letters" + std::to_string(i) + ".txt");
+        work_queue.push(dir + "/ML/ML/letters/train_letters" + std::to_string(i) + ".txt");
     }
 
     std::vector<ComputeNodeInfo> compute_nodes;
-    load_compute_nodes(compute_nodes, compute_nodes_file);
+    load_compute_nodes(compute_nodes, dir + "/" + compute_nodes_file);
     if (compute_nodes.empty()) {
       std::cout << "Error: No compute nodes found in " << compute_nodes_file << std::endl;
       exit(1);
