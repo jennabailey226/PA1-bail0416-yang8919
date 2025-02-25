@@ -28,15 +28,6 @@ class ComputeNodeHandler : virtual public ComputeNodeIf {
 
     std::vector<std::vector<double>> W = weights.W;
     std::vector<std::vector<double>> V = weights.V;
-
-    // // Convert Thrift list<list<double>> to vector<vector<double>>
-    // for (const auto& row:weights.W) {
-    //     W.push_back(vector<double>(row.begin(), row.end()));
-    // }
-    // for (const auto& row:weights.V) {
-    //     V.push_back(vector<double>(row.begin(), row.end()));
-    // }
-    //
     std::vector<std::vector<double>> W_original = W;
     std::vector<std::vector<double>> V_original = V;
 
