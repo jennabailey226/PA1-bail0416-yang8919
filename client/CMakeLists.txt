@@ -27,7 +27,7 @@ set(exgencpp_SOURCES
 )
 add_library(exgencpp STATIC ${exgencpp_SOURCES})
 
-set(ml_SOURCES ML/ML/ML.cpp)
+set(ml_SOURCES ../ML/ML/ML.cpp)
 add_library(ml STATIC ${ml_SOURCES})
 
 # Compile server executable

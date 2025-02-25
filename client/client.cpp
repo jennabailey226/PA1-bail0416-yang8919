@@ -3,8 +3,7 @@
 #include <thrift/transport/TSocket.h>
 #include <thrift/transport/TTransportUtils.h>
 #include <thrift/protocol/TBinaryProtocol.h>
-#include "./gen-cpp/Coordinator.h"
-#include "./gen-cpp/distributedML.h"
+#include "../gen-cpp/Coordinator.h"
 
 using namespace std;
 using namespace apache::thrift::transport;
@@ -15,15 +14,15 @@ using namespace distributedML;
 int main(int argc, char** argv) {
     // Read IP and port from command line
     if (argc < 6) {
-      cout << "Usage: ./client <coordinator_ip> <coordinator_port> <dir_path> <rounds> <epochs>" << endl;
-      return 1;
+	    std::cout << "Usage: ./client <coordinator_ip> <coordinator_port> <dir_path> <rounds> <epochs>" << std::endl;
+      exit(1);
     }
 
-    string ip = argv[1];
-    int port = stoi(argv[2]);
-    string dir = argv[3]
-    int rounds = stoi(argv[4]);
-    int epochs = stoi(argv[5]);
+    std::string ip = argv[1];
+    int port = std::__cxx11::stoi(argv[2]);
+    std::string dir = argv[3];
+    int rounds = std::__cxx11::stoi(argv[4]);
+    int epochs = std::__cxx11::stoi(argv[5]);
 
     try {
         // Create a socket connection
@@ -38,19 +37,19 @@ int main(int argc, char** argv) {
         transport->open();
 
         // Call the server's ping() function
-        string dir = "./ML/ML/letters";
-        double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_node.txt");
-        cout << "Connected to server!" << endl;
+	std::string dir = "./ML/ML/letters";
+        double res = client.train(dir, rounds, epochs, 20, 26, 0.0001, "compute_nodes.txt");
+	std::cout << "Connected to server!" << std::endl;
 
-        cout << "Validation error: " << res << endl;
+	std::cout << "Validation error: " << res << std::endl;
 
         // Close the connection
         transport->close();
-        cout << "Connection closed." << endl;
+	std::cout << "Connection closed." << std::endl;
 
     } catch (TException& tx) {
-        cerr << "Thrift error: " << tx.what() << endl;
-        return 1;
+	    std::cerr << "Thrift error: " << tx.what() << std::endl;
+        exit(1);
     }
 
     return 0;

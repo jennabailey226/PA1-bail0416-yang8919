@@ -1,0 +1,2 @@
+/usr/bin/ar qc libexgencpp.a "CMakeFiles/exgencpp.dir/home/yang8919/PA1-bail0416-yang8919-yahui/gen-cpp/Coordinator.cpp.o" "CMakeFiles/exgencpp.dir/home/yang8919/PA1-bail0416-yang8919-yahui/gen-cpp/ComputeNode.cpp.o" "CMakeFiles/exgencpp.dir/home/yang8919/PA1-bail0416-yang8919-yahui/gen-cpp/distributedML_types.cpp.o"
+/usr/bin/ranlib libexgencpp.a
