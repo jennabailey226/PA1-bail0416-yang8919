@@ -459,6 +459,7 @@ bool mlp::read_data(vector<vector<int>>& _X, vector<int>& _X_labels, string fnam
     // clear any pre-existing data
     _X.clear();
     _X_labels.clear();
+    cout << "read1\n";
 
     // parse lines
     string line;
@@ -478,7 +479,7 @@ bool mlp::read_data(vector<vector<int>>& _X, vector<int>& _X_labels, string fnam
                 sdata += c;
             }
         }
-
+        cout << "read2\n";
         // Add last element to datapoint
         // If training data, add last element (label) to X_label
         if(!labels)
@@ -493,6 +494,7 @@ bool mlp::read_data(vector<vector<int>>& _X, vector<int>& _X_labels, string fnam
         // Add datapoint to data matrix X
         _X.push_back(datapoint);
     }
+    cout << "read3\n";
     data.close();
     return true;
 }
