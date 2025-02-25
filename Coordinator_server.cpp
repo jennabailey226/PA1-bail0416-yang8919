@@ -75,20 +75,12 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     }
 
     Weights shared_weights;
-    std::vector<std::vector<double>> W;
-    std::vector<std::vector<double>> V;
+    // std::vector<std::vector<double>> W;
+    // std::vector<std::vector<double>> V;
 
-    almighty.get_weights(V, W);
-    std::cout << "v's size" << V.size() << endl;
-    std::cout << "w's size" << W.size() << endl;
-
-    // // Convert vector<vector<double>> to list<list<double>>
-    // for (const auto& row:W) {
-    //     shared_weights.W.push_back(list<double>(row.begin(), row.end()));
-    // }
-    // for (const auto& row:V) {
-    //     shared_weights.V.push_back(list<double>(row.begin(), row.end()));
-    // }
+    almighty.get_weights(shared_weights.V, shared_weights.W);
+    // std::cout << "v's size" << V.size() << endl;
+    // std::cout << "w's size" << W.size() << endl;
 
     queue<std::string> work_queue;
     for (int i = 1; i < 2; i++) {
