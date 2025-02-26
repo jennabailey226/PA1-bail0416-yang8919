@@ -123,7 +123,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
       };
 
       // training data, later will change it to i<12
-      for (int i = 1; i < 2; i++) {
+      for (int i = 1; i < 12; i++) {
           work_queue.push(dir + "/ML/ML/letters/train_letters" + std::to_string(i) + ".txt");
       }
 
