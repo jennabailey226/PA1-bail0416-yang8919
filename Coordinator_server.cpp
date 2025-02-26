@@ -85,10 +85,12 @@ class CoordinatorHandler : virtual public CoordinatorIf {
       exit(1);
     }
 
+    double validation_error;
     for (int i = 0; i < rounds; i++){
-      std::vector<vector<double>> shared_gradient_W(FEATURES, vector<double>(h, 0));
-      std::vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
+      std::vector<std::vector<double>> shared_gradient_W(FEATURES, std::vector<double>(h, 0));
+      std::vector<std::vector<double>> shared_gradient_V(h + 1, std::vector<double>(k, 0));
 
+      queue<std::string> work_queue;
       // thread function
       auto thread_func = [&](int node_index) {
         while (true){
@@ -121,7 +123,6 @@ class CoordinatorHandler : virtual public CoordinatorIf {
       };
 
       // training data, later will change it to i<12
-      queue<std::string> work_queue;
       for (int i = 1; i < 2; i++) {
           work_queue.push(dir + "/ML/ML/letters/train_letters" + std::to_string(i) + ".txt");
       }
@@ -137,8 +138,8 @@ class CoordinatorHandler : virtual public CoordinatorIf {
 
       almighty.update_weights(shared_gradient_V, shared_gradient_W);
 
-      double validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
-      std::out << "validation error: " << validation_error << std::endl;
+      validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
+      std::cout << "validation error: " << validation_error << std::endl;
     }
     return validation_error;
   }
