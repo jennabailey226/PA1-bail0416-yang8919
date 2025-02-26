@@ -15,6 +15,7 @@
 #include <list>
 #include <vector>
 #include "./ML/ML/ML.hpp"
+#define FEATURES 17
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -64,7 +65,7 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     std::cout << "Coordinator: rounds: " << rounds << " epocks: " << epochs << " hidden unit: "
       << h << " output unit: " << k << " learning rate: " << eta << std::endl;
 
-    // Initialize the global model
+    // initialize the model
     mlp almighty;
 
     // filename's path is for ML.cpp
@@ -74,76 +75,71 @@ class CoordinatorHandler : virtual public CoordinatorIf {
     }
 
     Weights shared_weights;
-    // std::vector<std::vector<double>> W;
-    // std::vector<std::vector<double>> V;
-
     almighty.get_weights(shared_weights.V, shared_weights.W);
 
-    // std::cout << "v's size" << V.size() << endl;
-    // std::cout << "w's size" << W.size() << endl;
-
-    queue<std::string> work_queue;
-    for (int i = 1; i < 2; i++) {
-        work_queue.push(dir + "/ML/ML/letters/train_letters" + std::to_string(i) + ".txt");
-    }
-
+    // load compute nodes
     std::vector<ComputeNodeInfo> compute_nodes;
-    std::cout << "before load_compute_nodes\n";
     load_compute_nodes(compute_nodes, dir + "/" + compute_nodes_file);
     if (compute_nodes.empty()) {
       std::cout << "Error: No compute nodes found in " << compute_nodes_file << std::endl;
       exit(1);
     }
-    std::cout << "after load_compute_nodes\n";
 
-    std::vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
-    std::vector<vector<double>> shared_gradient_W(17, vector<double>(h, 0));
+    for (int i = 0; i < rounds; i++){
+      std::vector<vector<double>> shared_gradient_W(FEATURES, vector<double>(h, 0));
+      std::vector<vector<double>> shared_gradient_V(h + 1, vector<double>(k, 0));
 
-    // thread function
-    auto thread_func = [&](int node_index) {
-      while (true){
-        if (work_queue.empty()) {
-          return;
-        }
-        std::string training_file = work_queue.front();
-        work_queue.pop();
-        std::shared_ptr<TTransport> socket(new TSocket(compute_nodes[node_index].ip, compute_nodes[node_index].port));
-        std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-        ComputeNodeClient client(protocol);
+      // thread function
+      auto thread_func = [&](int node_index) {
+        while (true){
+          if (work_queue.empty()) {
+            return;
+          }
+          std::string training_file = work_queue.front();
+          work_queue.pop();
+          std::shared_ptr<TTransport> socket(new TSocket(compute_nodes[node_index].ip, compute_nodes[node_index].port));
+          std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+          std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+          ComputeNodeClient client(protocol);
 
-        transport->open();
-        Gradient grad;
-        client.trainModel(grad, shared_weights, training_file, eta, epochs);
-        transport->close();
-        std::cout << "coordinator1\n";
-        for (int i = 0; i < shared_gradient_V.size(); i++) {
-          for (int j = 0; j < shared_gradient_V[i].size(); j++) {
-              shared_gradient_V[i][j] += grad.dV[i][j];
+          transport->open();
+          Gradient grad;
+          client.trainModel(grad, shared_weights, training_file, eta, epochs);
+          transport->close();
+
+          for (int i = 0; i < shared_gradient_V.size(); i++) {
+            for (int j = 0; j < shared_gradient_V[i].size(); j++) {
+                shared_gradient_V[i][j] += grad.dV[i][j];
+            }
+          }
+          for (int i = 0; i < shared_gradient_W.size(); i++) {
+            for (int j = 0; j < shared_gradient_W[i].size(); j++) {
+                shared_gradient_W[i][j] += grad.dW[i][j];
+            }
           }
         }
-        for (int i = 0; i < shared_gradient_W.size(); i++) {
-          for (int j = 0; j < shared_gradient_W[i].size(); j++) {
-              shared_gradient_W[i][j] += grad.dW[i][j];
-          }
-        }
+      };
+
+      // training data, later will change it to i<12
+      queue<std::string> work_queue;
+      for (int i = 1; i < 2; i++) {
+          work_queue.push(dir + "/ML/ML/letters/train_letters" + std::to_string(i) + ".txt");
       }
-    };
-    std::cout << "coordinator2\n";
-    std::vector<std::thread> workers;
-    for (int i = 0; i < compute_nodes.size(); i++) {
-        workers.emplace_back(thread_func, i);
+
+      std::vector<std::thread> workers;
+      for (int i = 0; i < compute_nodes.size(); i++) {
+          workers.emplace_back(thread_func, i);
+      }
+
+      for (auto& worker:workers) {
+          worker.join();
+      }
+
+      almighty.update_weights(shared_gradient_V, shared_gradient_W);
+
+      double validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
+      std::out << "validation error: " << validation_error << std::endl;
     }
-    std::cout << "coordinator3\n";
-    for (auto& worker:workers) {
-        worker.join();
-    }
-    std::cout << "coordinator4\n";
-    almighty.update_weights(shared_gradient_V, shared_gradient_W);
-    std::cout << "coordinator5\n";
-    double validation_error = almighty.validate(dir + "/ML/ML/letters/validate_letters.txt");
-    std::cout << "coordinator6\n";
-    std::cout << "Validation error: " << validation_error << endl;
     return validation_error;
   }
 
